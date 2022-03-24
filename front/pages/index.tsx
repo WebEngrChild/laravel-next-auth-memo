@@ -12,7 +12,7 @@ type LoginForm = {
 };
 
 // バリデーションメッセージの型
-type Validation = LoginForm & { loginFailed: string };　//型を拡張している
+type Validation = LoginForm & { loginFailed: string };
 
 const Home: NextPage = () => {
   // ルーター定義
