@@ -5,9 +5,7 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="0dc7c67d-b47c-4bf1-a02c-573d7cb4cdf7" name="変更" comment="">
-      <change beforePath="$PROJECT_DIR$/api/app/Http/Controllers/MemoController.php" beforeDir="false" afterPath="$PROJECT_DIR$/api/app/Http/Controllers/MemoController.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/api/app/Http/Resources/MemoResource.php" beforeDir="false" afterPath="$PROJECT_DIR$/api/app/Http/Resources/MemoResource.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/front/pages/index.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/front/pages/index.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -169,7 +167,7 @@
     <property name="node.js.selected.package.tslint" value="(autodetect)" />
     <property name="nodejs_package_manager_path" value="yarn" />
     <property name="settings.editor.selected.configurable" value="terminal" />
-    <property name="ts.external.directory.path" value="$PROJECT_DIR$/front/node_modules/typescript/lib" />
+    <property name="ts.external.directory.path" value="$APPLICATION_HOME_DIR$/plugins/JavaScriptLanguage/jsLanguageServicesImpl/external" />
     <property name="vue.rearranger.settings.migration" value="true" />
   </component>
   <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="アプリケーションレベル" UseSingleDictionary="true" transferred="true" />
@@ -181,7 +179,9 @@
       <option name="presentableId" value="Default" />
       <updated>1647983495037</updated>
       <workItem from="1647983506065" duration="6433000" />
-      <workItem from="1648072997184" duration="8411000" />
+      <workItem from="1648072997184" duration="9025000" />
+      <workItem from="1648157365507" duration="11000" />
+      <workItem from="1648157412581" duration="6000" />
     </task>
     <servers />
   </component>
