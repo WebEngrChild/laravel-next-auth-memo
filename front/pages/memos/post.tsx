@@ -1,5 +1,6 @@
 import { AxiosError, AxiosResponse } from 'axios';
 import type { NextPage } from 'next';
+import { useRouter } from 'next/router';
 import { RequiredMark } from '../../components/RequiredMark';
 import { ChangeEvent, useState } from 'react';
 import { axiosApi } from '../../lib/axios';
@@ -11,6 +12,8 @@ type MemoForm = {
 };
 
 const Post: NextPage = () => {
+  // ルーター定義
+  const router = useRouter();
   // state定義
   const [memoForm, setMemoForm] = useState<MemoForm>({
     title: '',
@@ -39,6 +42,7 @@ const Post: NextPage = () => {
           .post('/api/memos', memoForm)
           .then((response: AxiosResponse) => {
             console.log(response.data);
+            router.push('/memos');
           })
           .catch((err: AxiosError) => {
             console.log(err.response);
