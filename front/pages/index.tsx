@@ -28,7 +28,7 @@ const Home: NextPage = () => {
   });
   const [validation, setValidation] = useState<Validation>({});
 
-  // POSTデータの更新
+  // POST用フォームデータの更新
   const updateLoginForm = (e: ChangeEvent<HTMLInputElement>) => {
     setLoginForm({ ...loginForm, [e.target.name]: e.target.value });
   };
