@@ -31,6 +31,7 @@ const Post: NextPage = () => {
   const [validation, setValidation] = useState<Validation>({});
 
   // グローバルstateの定義
+  // TODO:画面リロードするとグローバルstateが削除されてAPI vs Frontで乖離=>次part7
   const { user } = useUserState();
   
   useEffect(() => {
@@ -39,7 +40,9 @@ const Post: NextPage = () => {
       router.push('/');
       return;
     }
-  }, [user, router]);
+
+    // TODO:本来は初期レンダリングのみとしたい=>次part7
+  }, [user, router]); 
 
   // POSTデータの更新
   const updateMemoForm = (
