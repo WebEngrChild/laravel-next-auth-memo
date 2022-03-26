@@ -2,6 +2,7 @@ import { AxiosError, AxiosResponse } from 'axios';
 import type { NextPage } from 'next';
 import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
+import { useUserState } from '../../atoms/userAtom';
 import { axiosApi } from '../../lib/axios';
 
 type Memo = {
@@ -11,18 +12,28 @@ type Memo = {
 
 const Memo: NextPage = () => {
     const router = useRouter();
-    // state定義
+    // ローカルstate定義
     const [memos, setMemos] = useState<Memo[]>([]);
 
-    // 初回レンダリング時にAPIリクエスト
+    // グローバルstateの定義
+    const { user } = useUserState();
+    console.log(user);
+
+    // 初回レンダリング後にAPIリクエスト
     useEffect(() => {
+        // ログイン判定
+        if (!user) {
+            router.push('/');
+            return;
+        }
+
         axiosApi
             .get('/api/memos')
             .then((response: AxiosResponse) => {
-                setMemos(response.data.data);
+                setMemos(response.data.data); // stateが変更されるので再レンダリングが行われる
             })
             .catch((err: AxiosError) => console.log(err.response));
-    }, []);
+    }, [user, router]); //
 
     return (
         <div className='w-2/3 mx-auto mt-32'>

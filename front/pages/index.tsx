@@ -4,6 +4,7 @@ import { ChangeEvent, useState } from 'react';
 import { RequiredMark } from '../components/RequiredMark';
 import { axiosApi } from '../lib/axios';
 import { useRouter } from 'next/router';
+import { useUserState } from '../atoms/userAtom';
 
 // POSTデータの型
 type LoginForm = {
@@ -33,6 +34,9 @@ const Home: NextPage = () => {
     setLoginForm({ ...loginForm, [e.target.name]: e.target.value });
   };
 
+  // グローバルstate変更関数取得
+  const { setUser } = useUserState();
+
   // ログイン
   const login = () => {
     // バリデーションメッセージの初期化
@@ -45,6 +49,10 @@ const Home: NextPage = () => {
           axiosApi
               .post('/login', loginForm)
               .then((response: AxiosResponse) => {
+                // ログインデータをグローバルstateにセット
+                setUser(response.data.data);
+
+                //　正常であればリダイレクト
                 router.push('/memos');
               })
               .catch((err: AxiosError) => {

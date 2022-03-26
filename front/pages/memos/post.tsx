@@ -2,7 +2,8 @@ import { AxiosError, AxiosResponse } from 'axios';
 import type { NextPage } from 'next';
 import { useRouter } from 'next/router';
 import { RequiredMark } from '../../components/RequiredMark';
-import { ChangeEvent, useState } from 'react';
+import { ChangeEvent, useEffect, useState } from 'react';
+import { useUserState } from '../../atoms/userAtom';
 import { axiosApi } from '../../lib/axios';
 
 // POSTデータの型
@@ -18,14 +19,27 @@ type Validation = {
 };
 
 const Post: NextPage = () => {
+
   // ルーター定義
   const router = useRouter();
-  // state定義
+
+  // ローカルstate定義
   const [memoForm, setMemoForm] = useState<MemoForm>({
     title: '',
     body: '',
   });
   const [validation, setValidation] = useState<Validation>({});
+
+  // グローバルstateの定義
+  const { user } = useUserState();
+  
+  useEffect(() => {
+    // ログイン中か判定
+    if (!user) {
+      router.push('/');
+      return;
+    }
+  }, [user, router]);
 
   // POSTデータの更新
   const updateMemoForm = (
