@@ -3,7 +3,7 @@ import type { NextPage } from 'next';
 import { useRouter } from 'next/router';
 import { RequiredMark } from '../../components/RequiredMark';
 import { ChangeEvent, useEffect, useState } from 'react';
-import { useUserState } from '../../atoms/userAtom';
+import { useAuth } from '../../hooks/useAuth';
 import { axiosApi } from '../../lib/axios';
 
 // POSTデータの型
@@ -30,16 +30,25 @@ const Post: NextPage = () => {
   });
   const [validation, setValidation] = useState<Validation>({});
 
-  // グローバルstateの定義
-  const { user } = useUserState();
-  
+  // ログイン判定用のカスタムフック
+  const { checkLoggedIn } = useAuth();
+
+  // useEffectとは"副作用フック"のこと
   useEffect(() => {
-    // ログイン中か判定
-    if (!user) {
-      router.push('/');
-      return;
-    }
-  }, [user, router]);
+    const init = async () => { // IMO: void型の追記が必要かも
+
+      // ログイン中か判定
+      const res: boolean = await checkLoggedIn(); // IMO:型推測が使えるので定義不要
+      if (!res) {
+        router.push('/');
+      }
+    };
+
+    // useEffect内で非同期関数を実行する場合はアンマウント時に副作用フックに通知するためにクリーンアップ関数を返す必要がある
+    // cleanup関数は次のeffectが呼ばれる前やアンマウントする場合に呼ばれる
+    // 今回の場合ではdependensyが空->初期レンダリング時にしか呼ばれない->アンマウントのみ
+    init();
+  }, []);
 
   // POSTデータの更新
   const updateMemoForm = (
