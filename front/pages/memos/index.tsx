@@ -4,6 +4,7 @@ import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
 import { useAuth } from '../../hooks/useAuth';
 import { axiosApi } from '../../lib/axios';
+import { Loading } from '../../components/Loading';
 
 type Memo = {
     title: string;
@@ -14,6 +15,9 @@ const Memo: NextPage = () => {
     const router = useRouter();
     // ローカルstate定義
     const [memos, setMemos] = useState<Memo[]>([]);
+    
+    //ローディング判定用
+    const [isLoading, setIsLoading] = useState(true);
 
     // グローバルstateの定義
     const { checkLoggedIn } = useAuth();
@@ -31,10 +35,14 @@ const Memo: NextPage = () => {
                 .then((response: AxiosResponse) => {
                     setMemos(response.data.data);
                 })
-                .catch((err: AxiosError) => console.log(err.response));
+                .catch((err: AxiosError) => console.log(err.response))
+                .finally(() => setIsLoading(false))
         };
-        init();　// 何もないとPromiseが渡されてしまう->第一引数にはクリーンアップ関数が必要->アンマウント時にクリーンアップが走る
+        init(); // 何もないとPromiseが渡されてしまう->第一引数にはクリーンアップ関数が必要->アンマウント時にクリーンアップが走る
     }, []); // 依存配列空白->初回のみ
+
+    // ローディング画面表示
+    if (isLoading) return <Loading />;
 
     return (
         <div className='w-2/3 mx-auto mt-32'>
