@@ -1,7 +1,9 @@
 <?php
 
 use App\Http\Controllers\MemoController;
+use App\Http\Resources\UserResource;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
 /*

@@ -2,7 +2,7 @@ import { AxiosError, AxiosResponse } from 'axios';
 import type { NextPage } from 'next';
 import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
-import { useUserState } from '../../atoms/userAtom';
+import { useAuth } from '../../hooks/useAuth';
 import { axiosApi } from '../../lib/axios';
 
 type Memo = {
@@ -16,24 +16,25 @@ const Memo: NextPage = () => {
     const [memos, setMemos] = useState<Memo[]>([]);
 
     // グローバルstateの定義
-    const { user } = useUserState();
-    console.log(user);
+    const { checkLoggedIn } = useAuth();
 
     // 初回レンダリング後にAPIリクエスト
     useEffect(() => {
-        // ログイン判定
-        if (!user) {
-            router.push('/');
-            return;
-        }
-
-        axiosApi
-            .get('/api/memos')
-            .then((response: AxiosResponse) => {
-                setMemos(response.data.data); // stateが変更されるので再レンダリングが行われる
-            })
-            .catch((err: AxiosError) => console.log(err.response));
-    }, [user, router]); //
+        const init = async () => {
+            const res: boolean = await checkLoggedIn();
+            if (!res) {
+                await router.push('/');
+                return;
+            }
+            axiosApi
+                .get('/api/memos')
+                .then((response: AxiosResponse) => {
+                    setMemos(response.data.data);
+                })
+                .catch((err: AxiosError) => console.log(err.response));
+        };
+        init();　// 何もないとPromiseが渡されてしまう->第一引数にはクリーンアップ関数が必要->アンマウント時にクリーンアップが走る
+    }, []); // 依存配列空白->初回のみ
 
     return (
         <div className='w-2/3 mx-auto mt-32'>
