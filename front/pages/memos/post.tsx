@@ -2,7 +2,8 @@ import { AxiosError, AxiosResponse } from 'axios';
 import type { NextPage } from 'next';
 import { useRouter } from 'next/router';
 import { RequiredMark } from '../../components/RequiredMark';
-import { ChangeEvent, useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
+import { useForm } from 'react-hook-form';
 import { useAuth } from '../../hooks/useAuth';
 import { axiosApi } from '../../lib/axios';
 
@@ -24,14 +25,19 @@ const Post: NextPage = () => {
   const router = useRouter();
 
   // ローカルstate定義
-  const [memoForm, setMemoForm] = useState<MemoForm>({
-    title: '',
-    body: '',
-  });
   const [validation, setValidation] = useState<Validation>({});
 
   // ログイン判定用のカスタムフック
   const { checkLoggedIn } = useAuth();
+
+  // react-fook-formの導入
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm<MemoForm>();
+  
+  console.log(errors);
 
   // useEffectとは"副作用フック"のこと
   useEffect(() => {
@@ -50,15 +56,8 @@ const Post: NextPage = () => {
     init();
   }, []);
 
-  // POSTデータの更新
-  const updateMemoForm = (
-      e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
-  ) => {
-    setMemoForm({ ...memoForm, [e.target.name]: e.target.value });
-  };
-
   // メモ登録
-  const createMemo = () => {
+  const createMemo = (data: MemoForm) => {
     setValidation({});
     axiosApi
       // CSRF保護の初期化
@@ -66,7 +65,7 @@ const Post: NextPage = () => {
       .then((res) => {
         // APIへのリクエスト
         axiosApi
-          .post('/api/memos', memoForm)
+        .post('/api/memos', data)
           .then((response: AxiosResponse) => {
             router.push('/memos');
           })
@@ -98,12 +97,14 @@ const Post: NextPage = () => {
             <p>タイトル</p>
             <RequiredMark />
           </div>
+
+          {/* React Front側のバリデーション */}
           <input
             className='p-2 border rounded-md w-full outline-none'
-            name='title'
-            value={memoForm.title}
-            onChange={updateMemoForm}
+            {...register('title', { required: '必須入力です。' })}
           />
+
+          {/* Laravel API側のバリデーション */}
           {validation.title && (
               <p className='py-3 text-red-500'>{validation.title}</p>
           )}
@@ -113,21 +114,25 @@ const Post: NextPage = () => {
             <p>メモの内容</p>
             <RequiredMark />
           </div>
+
+          {/* React Front側のバリデーション */}
           <textarea
             className='p-2 border rounded-md w-full outline-none'
-            name='body'
             cols={30}
             rows={4}
-            value={memoForm.body}
-            onChange={updateMemoForm}
+            {...register('body', { required: '必須入力です。' })}
           />
+
+          {/* Laravel API側のバリデーション */}
           {validation.body && (
               <p className='py-3 text-red-500'>{validation.body}</p>
           )}
         </div>
         <div className='text-center'>
           <button className='bg-gray-700 text-gray-50 py-3 sm:px-20 px-10 mt-8 rounded-xl cursor-pointer drop-shadow-md hover:bg-gray-600'
-          onClick={createMemo}
+
+          // react-fook-formで送信
+          onClick={handleSubmit(createMemo)}
           >
             登録する
           </button>
