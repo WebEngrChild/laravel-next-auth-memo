@@ -12,10 +12,10 @@ export const useAuth = () => {
         // リロード等でFrontでは未ログイン->API側にログインしているか確認->sessionにあるか
         try {
             const res = await axiosApi.get('/api/user');
-            if (!res.data.data) { // APIで未ログイン判定される場合->response.dataがnull->引数部分はundefined
+            if (!res.data.data) { // APIで未ログイン判定される場合->response.dataがnull->引数部分はundefinedでfalsy
                 return false;
             }
-            setUser(res.data.data);
+            setUser(res.data.data); // グローバルstateにセットする
             return true;
         } catch {
             return false;

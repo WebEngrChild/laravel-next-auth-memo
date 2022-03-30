@@ -24,6 +24,8 @@ const Memo: NextPage = () => {
 
     // 初回レンダリング後にAPIリクエスト
     useEffect(() => {
+
+        // ログイン判定
         const init = async () => {
             const res: boolean = await checkLoggedIn();
             if (!res) {
@@ -36,12 +38,12 @@ const Memo: NextPage = () => {
                     setMemos(response.data.data);
                 })
                 .catch((err: AxiosError) => console.log(err.response))
-                .finally(() => setIsLoading(false))
+                .finally(() => setIsLoading(false)) // 失敗しても成功してもloadingを終わらす
         };
         init(); // 何もないとPromiseが渡されてしまう->第一引数にはクリーンアップ関数が必要->アンマウント時にクリーンアップが走る
     }, []); // 依存配列空白->初回のみ
 
-    // ローディング画面表示
+    // ローディング画面表示（デフォルトはtrue）
     if (isLoading) return <Loading />;
 
     return (

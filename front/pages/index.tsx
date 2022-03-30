@@ -1,3 +1,8 @@
+/*
+   useStateで管理していたものをreact-fook-formを導入する
+   form周りでコメントアウトしている内容が該当箇所の部分
+ */
+
 import type { NextPage } from 'next';
 import { AxiosError, AxiosResponse } from 'axios';
 import { ChangeEvent, useState } from 'react';
@@ -25,7 +30,7 @@ const Home: NextPage = () => {
   // ルーター定義
   const router = useRouter();
 
-  // state定義
+  // form用のstate定義
   // const [loginForm, setLoginForm] = useState<LoginForm>({
   //   email: '',
   //   password: '',
@@ -49,7 +54,7 @@ const Home: NextPage = () => {
   // };
 
   // ログイン
-  const login = (data: LoginForm) => {
+  const login = (formData: LoginForm) => {
     // バリデーションメッセージの初期化
     setValidation({});
 
@@ -60,7 +65,7 @@ const Home: NextPage = () => {
           // ログイン処理
           axiosApi
               // .post('/login', loginForm)
-              .post('/login', data)
+              .post('/login', formData)
               .then((response: AxiosResponse) => {
                 // ログインデータをグローバルstateにセット
                 setUser(response.data.data);
@@ -74,7 +79,7 @@ const Home: NextPage = () => {
                 if (err.response?.status === 422) {
                   const errors = err.response?.data.errors;
 
-                  // state更新用のオブジェクトを別で定義
+                  // バリデーションstate更新用のオブジェクトを別で定義
                   const validationMessages: { [index: string]: string } = {} as Validation; //asいらなくない？
 
                   Object.keys(errors).map((key: string) => {
