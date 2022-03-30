@@ -4,6 +4,7 @@ import { useRouter } from 'next/router';
 import { RequiredMark } from '../../components/RequiredMark';
 import { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
+import { ErrorMessage } from '@hookform/error-message';
 import { useAuth } from '../../hooks/useAuth';
 import { axiosApi } from '../../lib/axios';
 
@@ -104,6 +105,14 @@ const Post: NextPage = () => {
             {...register('title', { required: '必須入力です。' })}
           />
 
+          <ErrorMessage
+              errors={errors}
+              name={'title'}
+              render={({ message }) => (
+                  <p className='py-3 text-red-500'>{message}</p>
+              )}
+          />
+
           {/* Laravel API側のバリデーション */}
           {validation.title && (
               <p className='py-3 text-red-500'>{validation.title}</p>
@@ -121,6 +130,14 @@ const Post: NextPage = () => {
             cols={30}
             rows={4}
             {...register('body', { required: '必須入力です。' })}
+          />
+
+          <ErrorMessage
+              errors={errors}
+              name={'body'}
+              render={({ message }) => (
+                  <p className='py-3 text-red-500'>{message}</p>
+              )}
           />
 
           {/* Laravel API側のバリデーション */}
